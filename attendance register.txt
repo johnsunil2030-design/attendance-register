@@ -1,0 +1,134 @@
+#include <stdio.h>
+#include <ctype.h>
+
+#define MAX 50
+
+int main()
+{
+    int roll[MAX];
+    char name[MAX][50];
+    int presentDays[MAX];
+    int studentCount = 0;
+    int totalDays = 0;
+    int choice, i, duplicate;
+    char status;
+
+    do
+    {
+        printf("\n===== ATTENDANCE REGISTER =====\n");
+        printf("1. Add Student\n");
+        printf("2. Mark One Day's Attendance\n");
+        printf("3. View All Students\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+            case 1:
+
+                if (studentCount == MAX)
+                {
+                    printf("Student list is full!\n");
+                    break;
+                }
+
+                printf("Enter student roll number: ");
+                scanf("%d", &roll[studentCount]);
+
+                duplicate = 0;
+
+                for (i = 0; i < studentCount; i++)
+                {
+                    if (roll[i] == roll[studentCount])
+                    {
+                        duplicate = 1;
+                        break;
+                    }
+                }
+
+                if (duplicate == 1)
+                {
+                    printf("This roll number is already registered.\n");
+                    break;
+                }
+
+                printf("Enter student name: ");
+                scanf(" %49[^\n]", name[studentCount]);
+
+                presentDays[studentCount] = 0;
+                studentCount++;
+
+                printf("Student added. S.No. = %d\n", studentCount);
+                break;
+
+            case 2:
+
+                if (studentCount == 0)
+                {
+                    printf("No students registered yet.\n");
+                    break;
+                }
+
+                totalDays++;
+
+                printf("\nMark attendance for Day %d\n", totalDays);
+
+                for (i = 0; i < studentCount; i++)
+                {
+                    printf("S.No. %d | Roll No. %d | %s\n",
+                           i + 1, roll[i], name[i]);
+
+                    do
+                    {
+                        printf("Enter P for Present or A for Absent: ");
+                        scanf(" %c", &status);
+
+                        status = toupper(status);
+
+                        if (status != 'P' && status != 'A')
+                            printf("Invalid entry. Enter P or A.\n");
+
+                    } while (status != 'P' && status != 'A');
+
+                    if (status == 'P')
+                        presentDays[i]++;
+                }
+
+                printf("Attendance marked successfully.\n");
+                break;
+
+            case 3:
+
+                if (studentCount == 0)
+                {
+                    printf("No students registered yet.\n");
+                    break;
+                }
+
+                printf("\nS.No. Roll No. Student Name Days Present\n");
+                printf("------------------------------------------\n");
+
+                for (i = 0; i < studentCount; i++)
+                {
+                    printf("%-7d %-9d %-21s %d\n",
+                           i + 1, roll[i], name[i], presentDays[i]);
+                }
+
+                printf("Total attendance days marked: %d\n", totalDays);
+                break;
+
+            case 4:
+
+                printf("Exiting Attendance Register. Thank you!\n");
+                break;
+
+            default:
+
+                printf("Invalid choice. Please try again.\n");
+        }
+
+    } while (choice != 4);
+
+    return 0;
+}
